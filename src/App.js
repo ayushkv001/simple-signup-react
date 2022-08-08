@@ -1,23 +1,52 @@
-import logo from './logo.svg';
+
+import { useState  } from 'react';
 import './App.css';
 
 function App() {
+  const [allUsers,setAllUsers] = useState([]);
+  const [see,setSee] = useState(true)
+
+  const submitForm =(e)=>{
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const inputObject = Object.fromEntries(formData) 
+    setAllUsers([...allUsers,inputObject])
+    e.target.reset()
+  }
+
+  const handleSight = () =>{
+    if(see === true){
+    
+    document.getElementById('all').style.display = 'block'
+    setSee(false)}
+    else{
+      document.getElementById('all').style.display = 'none'
+      setSee(true)
+    }
+  }
+
   return (
+    <div className='out'>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Registration Form</h1>
+      <form onSubmit={submitForm}>
+        <div className='inDiv'>
+        <input name='name' placeholder='Name' autoComplete='off' />
+        <input name='companyname' placeholder='Company-Name' autoComplete='off' />
+        <input name='email' placeholder='Email' autoComplete='off' />
+        <input name='phone' placeholder='Phone' autoComplete='off' />
+        <input type='password' name='password' placeholder='Password' autoComplete='off' />
+        </div>
+        <button type='submit'>Register</button>
+      </form>
+
+    </div>
+    <button onClick={handleSight}>See All Users On/Off</button>
+    <div className='all' id='all'>{
+      allUsers.map((obj)=>{
+        return <>Name : {obj.name} | Company : {obj.companyname} | Email : {obj.email} | Phone : {obj.phone} <br/></>
+      })
+      }</div>
     </div>
   );
 }
